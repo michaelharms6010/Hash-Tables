@@ -51,7 +51,26 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        new_linked_pair = LinkedPair(key, value)
+
+        index = self._hash_mod(key)
+
+        if self.storage[index] is not None:
+            if self.storage[index].key == key:
+                self.storage[index] = new_linked_pair
+                return
+            current = self.storage[index]
+            while current.next is not None: 
+                if current.key == key:
+                    current = new_linked_pair
+                    break
+                current = current.next
+            current.next = new_linked_pair  
+      
+        else:
+            self.storage[index] = new_linked_pair
+        return
+
 
 
 
@@ -63,7 +82,24 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        index = self._hash_mod(key)
+
+        if self.storage[index] is not None:
+            if self.storage[index].key == key:
+                self.storage[index] = None
+            else:
+                current = self.storage[index]
+                while current.next is not None: 
+                    if current.key == key:
+                        current = None
+                        break
+                    current = current.next
+
+
+        else:
+            print(f"Warning key ({key}) not found.")
+
+        return
 
 
     def retrieve(self, key):
@@ -74,7 +110,21 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        index = self._hash_mod(key)
+
+        if self.storage[index] is not None:
+            if self.storage[index].key == key:
+                return self.storage[index].value
+            else:
+                current = self.storage[index]
+                while current is not None: 
+                    if current.key == key:
+                        return current.value
+                    current = current.next
+        else:
+            return None
+
+        return
 
 
     def resize(self):
@@ -84,7 +134,20 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        old_storage = self.storage
+        self.capacity *= 2
+        self.storage = [None] * self.capacity
+
+        for item in old_storage:
+            if item is None: 
+                pass
+            elif item.next is None: 
+                self.insert(item.key, item.value)
+            else: 
+                current = item
+                while current is not None: 
+                    self.insert(current.key, current.value)
+                    current = current.next
 
 
 
